@@ -1,0 +1,6 @@
+*.xls
+*.xlsx
+*.rar
+BKUP/*
+doc/*
+
