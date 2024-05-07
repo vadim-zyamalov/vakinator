@@ -8,7 +8,7 @@ parser.add_argument(
     "--journals",
     dest="journals_list",
     type=str,
-    default="raw/Перечень ВАК ред.csv",
+    default="json/VAK.json",
     help="Список журналов",
 )
 parser.add_argument(
@@ -17,7 +17,7 @@ parser.add_argument(
     dest="output_file",
     type=str,
     default="Результат.xlsx",
-    help="Итоговый файл",
+    help="Итоговый файл (xlsx)",
 )
 parser.add_argument(
     "-v",
@@ -44,23 +44,23 @@ parser.add_argument(
     help="Разделитель строк в ячейке",
 )
 parser.add_argument(
-    "-pp",
-    "--preprocess",
-    dest="preprocess",
+    "-ppm",
+    "--preprocess_matches",
+    dest="preprocess_matches",
     action="store_true",
-    help="Нужна ли предварительная подготовка данных",
+    help="Нужна ли предварительная подготовка кодов соответствия",
 )
 parser.add_argument(
-    "-ppf",
-    "--preprocess_file",
-    dest="pp_file",
+    "-ppmf",
+    "--preprocess_matches_file",
+    dest="pp_matches_file",
     type=str,
     default="raw/Соответствие ВАК.xlsx",
     help="Соответствие новых и старых специальностей (ExcelX)",
 )
 parser.add_argument(
-    "-pps",
-    "--preprocess_sheet_name",
+    "-ppms",
+    "--preprocess_matches_sheet",
     dest="pp_sheet_name",
     type=str,
     default="Full Match",
@@ -69,9 +69,16 @@ parser.add_argument(
 parser.add_argument(
     "-ppj",
     "--preprocess_journals",
-    dest="pp_journals",
+    dest="preprocess_journals",
+    action="store_true",
+    help="Нужна ли предварительная подготовка списка журналов",
+)
+parser.add_argument(
+    "-ppjf",
+    "--preprocess_journals_file",
+    dest="pp_journals_file",
     type=str,
-    default="json/VAK.json",
+    default="raw/Перечень ВАК ред.csv",
     help="Список журналов",
 )
 

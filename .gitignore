@@ -1,6 +1,7 @@
+**/__pycache__
 *.xls
 *.xlsx
 *.rar
-BKUP/*
+BKUP*/*
 doc/*
-
+results/*

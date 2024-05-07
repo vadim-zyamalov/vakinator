@@ -86,7 +86,6 @@ def prepare_branches_matches(file: str, output_file: str, sheet_name: str):
         data[col] = data[col].apply(normalize_line)
     data.head()
 
-    # %%
     N, _ = data.shape
     new_cols = [col for col in data.columns if col.startswith("New") and col != "New"]
     old_cols = [col for col in data.columns if col.startswith("Old") and col != "Old"]
@@ -124,7 +123,6 @@ def prepare_branches_matches(file: str, output_file: str, sheet_name: str):
         json.dump(result, jf, ensure_ascii=False)
 
 
-# %%
 def process_title_line(title: str) -> tuple[str, str, str]:
     new_title = ""
     new_alttitle = ""
@@ -142,13 +140,18 @@ def process_title_line(title: str) -> tuple[str, str, str]:
 
     for chunk in chunks[1:]:
         if chunk.startswith(TRANS):
-            new_alttitle = chunk.split(": ")[1]
+            try:
+                new_alttitle = chunk.split(":")[1].strip()
+            except IndexError:
+                try:
+                    new_alttitle = chunk.split("Федерации ")[1].strip()
+                except IndexError:
+                    new_alttitle = "!!!ERROR!!!"
         else:
             new_oldtitle = chunk
     return new_title, new_alttitle, new_oldtitle
 
 
-# %%
 def process_entry(
     title, issn, branches, old_codes: list, new_codes: list, vak_codes: dict
 ) -> dict:
@@ -197,7 +200,6 @@ def process_entry(
     }
 
 
-# %%
 def process_journal_data(
     data: pd.DataFrame, old_codes: list, new_codes: list, vak_codes: dict
 ) -> dict:
@@ -248,7 +250,9 @@ def process_journal_data(
             new_branches.append((tmp_dates, tmp_branches))
         else:
             prev_dates, prev_branches = new_branches[-1]
-            if (prev_branches[-1] == ",") or (tmp_branches[0] in RUALPHA):
+            if (prev_branches[-1] == ",") or (
+                tmp_branches and tmp_branches[0] in RUALPHA
+            ):
                 prev_branches += " " + tmp_branches
             elif prev_branches[-1] == "-":
                 prev_branches += tmp_branches
@@ -263,7 +267,6 @@ def process_journal_data(
     return data_fin
 
 
-# %%
 def gen_branch_patterns(code: str, codes: dict) -> list[str]:
     patterns = []
     cur_codes = codes[code]
@@ -288,7 +291,6 @@ def gen_branch_patterns(code: str, codes: dict) -> list[str]:
     return patterns
 
 
-# %%
 def search_for_branch(item: dict, pats: list[str]) -> bool:
     branches = item["branches"]
     for branch in branches:
@@ -307,7 +309,6 @@ def search_for_branch(item: dict, pats: list[str]) -> bool:
     return False
 
 
-# %%
 def pd_from_dict(jdata: dict, keys: list | None = None) -> pd.DataFrame:
     if keys is None:
         keys = list(jdata.keys())
