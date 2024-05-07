@@ -4,4 +4,7 @@
 *.rar
 BKUP*/*
 doc/*
+json/*
+raw/*
 results/*
+
